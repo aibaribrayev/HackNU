@@ -1,12 +1,3 @@
-from rest_framework import viewsets
-from .models import Product, Zakupki, Sales
-from .serializers import ProductSerializer, ZakupkiSerializer, SalesSerializer
-
-
-class ZakupkiViewSet(viewsets.ModelViewSet):
-    queryset = Zakupki.objects.all()
-    serializer_class = ZakupkiSerializer
-
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
