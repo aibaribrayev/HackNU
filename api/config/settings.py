@@ -77,8 +77,15 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'bqm4pgy45ritx2m2zkgn',
+        'USER': 'urbvbmxcu9morjp7',
+        'PASSWORD': 'E8CMsE7fDdxDHPCcPOh9',
+        'HOST': 'bqm4pgy45ritx2m2zkgn-mysql.services.clever-cloud.com',
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        },
     }
 }
 
