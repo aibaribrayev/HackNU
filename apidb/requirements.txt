@@ -3,3 +3,6 @@ sqlalchemy
 pymysql
 sqlalchemy[async]
 aiomysql
+uvicorn
+gunicorn
+python-dotenv

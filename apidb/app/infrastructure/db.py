@@ -1,18 +1,26 @@
 import os
-from contextlib import asynccontextmanager
+
 from sqlalchemy import create_engine
-from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
-from app.domain.models import Base
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
+from fastapi import Depends
 
 DATABASE_URL = os.getenv("DATABASE_URL", "mysql+aiomysql://{username}:{password}@{host}:{port}/{database}")
 
-engine = create_async_engine(DATABASE_URL, echo=True)
-Base.metadata.create_all(bind=engine)
+async_engine = create_async_engine(
+    DATABASE_URL
+)
 
-async_session = sessionmaker(engine, expire_on_commit=False, class_='AsyncSession')
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, class_=AsyncSession, bind=async_engine)
 
-@asynccontextmanager
-async def get_db():
-    async with async_session() as session:
-        yield session
+Base = declarative_base()
+
+
+async def get_db() -> Session:
+    async with SessionLocal() as session:
+        try:
+            yield session
+        finally:
+            await session.close()
