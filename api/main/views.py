@@ -23,12 +23,12 @@ class SalesViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk=None, *args, **kwargs):
-        sale = self.get_object(pk)
+        sale = self.get_object()
         serializer = SaleSerializer(sale)
         return Response(serializer.data)
 
     def update(self, request, pk=None, *args, **kwargs):
-        sale = self.get_object(pk)
+        sale = self.get_object()
         serializer = SaleSerializer(sale, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -37,7 +37,7 @@ class SalesViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None, *args, **kwargs):
-        sale = self.get_object(pk)
+        sale = self.get_object()
         sale.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -57,12 +57,12 @@ class SupplyViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk=None, *args, **kwargs):
-        suppply = self.get_object(pk)
+        suppply = self.get_object()
         serializer = SupplySerializer(suppply)
         return Response(serializer.data)
 
     def update(self, request, pk=None, *args, **kwargs):
-        supply = self.get_object(pk)
+        supply = self.get_object()
         serializer = SupplySerializer(supply, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -71,7 +71,7 @@ class SupplyViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None, *args, **kwargs):
-        supply = self.get_object(pk)
+        supply = self.get_object()
         supply.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
