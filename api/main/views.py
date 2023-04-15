@@ -14,11 +14,13 @@ class SalesViewSet(viewsets.ModelViewSet):
     serializer_class = SaleSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = SupplySerializer(data=request.data)
+        serializer = SaleSerializer(data=request.data)
         if serializer.is_valid():
+            print(request.data.get('quantity'))
+            print(f"CALL UpdateSoldAmount({request.data.get('quantity')}, {request.data.get('price')});")
             with connection.cursor() as cursor:
-                cursor.execute(f"CALL UpdateSoldAmount({request.query_params.get('sold_amount')}, {request.query_params.get('price')});")
-            serializer.save()
+                cursor.execute(f"CALL UpdateSoldAmount({request.data.get('quantity')}, {request.data.get('price')});")
+                print(cursor.fetchall()[0][0])
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -50,8 +52,6 @@ class SupplyViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = SupplySerializer(data=request.data)
         if serializer.is_valid():
-            with connection.cursor() as cursor:
-                cursor.execute(f"CALL UpdateSoldAmount({request.query_params.get('sold_amount')}, {request.query_params.get('price')});")
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
@@ -96,7 +96,7 @@ def update_sold_amount(request):
               -- Cursor to fetch rows that meet the criteria
               DECLARE cur CURSOR FOR
                 SELECT barcode, quantity, sold_amount, price
-                FROM {Supply._meta.db_table}
+                FROM main_supply
                 WHERE sold_amount < quantity
                 ORDER BY datetime ASC;
 
@@ -121,13 +121,13 @@ def update_sold_amount(request):
                   SET curr_sold_amount = curr_sold_amount + need_amount;
                   SET final_sum = final_sum + (need_amount * cur_price);
                   SET need_amount = 0;
-                  UPDATE {Supply._meta.db_table}
+                  UPDATE main_supply
                   SET sold_amount = curr_sold_amount
                   WHERE barcode = curr_barcode;
                   LEAVE update_loop;
                 END IF;
 
-                UPDATE {Supply._meta.db_table}
+                UPDATE main_supply
                 SET sold_amount = curr_sold_amount
                 WHERE barcode = curr_barcode;
 
@@ -137,11 +137,14 @@ def update_sold_amount(request):
 
               SELECT final_sum;
 
-              INSERT INTO {Sale._meta.db_table} (barcode, quantity, datetime, price, margin)
+              INSERT INTO main_sale (barcode, quantity, datetime, price, margin)
               VALUES ('ABC123', need_amount_original, NOW(), sale_price, ROUND(need_amount_original * sale_price - final_sum, 2));
 
             END;
         """)
+        cursor.execute("CALL UpdateSoldAmount(100, 10);")
+        print(cursor.fetchall())
+        return HttpResponse("Procedure created")
         # cursor.execute(f"""
         #     CREATE PROCEDURE UpdateSoldAmount(IN need_amount FLOAT)
         #     BEGIN

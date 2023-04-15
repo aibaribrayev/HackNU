@@ -13,3 +13,4 @@ class Sale(models.Model):
     quantity = models.IntegerField()
     datetime = models.DateTimeField()
     price = models.FloatField()
+    margin = models.FloatField(default=0)
