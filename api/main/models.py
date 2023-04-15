@@ -5,7 +5,7 @@ class Supply(models.Model):
     quantity = models.IntegerField()
     datetime = models.DateTimeField()
     price = models.FloatField()
-    sold_amount = models.FloatField()
+    sold_amount = models.IntegerField()
 
 
 class Sale(models.Model):
