@@ -1,16 +1,16 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
-from .models import Sales
-from .serializers import SalesSerializer, SupplySerializer
+from .models import Supply, Sale
+from .serializers import SupplySerializer, SaleSerializer
 
 
 class SalesViewSet(viewsets.ModelViewSet):
-    queryset = Sales.objects.all()
-    serializer_class = SalesSerializer
+    queryset = Sale.objects.all()
+    serializer_class = SaleSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = SalesSerializer(data=request.data)
+        serializer = SaleSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -19,12 +19,12 @@ class SalesViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         sale = self.get_object(pk)
-        serializer = SalesSerializer(sale)
+        serializer = SaleSerializer(sale)
         return Response(serializer.data)
 
     def update(self, request, pk=None, *args, **kwargs):
         sale = self.get_object(pk)
-        serializer = SalesSerializer(sale, data=request.data)
+        serializer = SaleSerializer(sale, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -38,11 +38,11 @@ class SalesViewSet(viewsets.ModelViewSet):
 
 
 class SupplyViewSet(viewsets.ModelViewSet):
-    queryset = Sales.objects.all()
-    serializer_class = SalesSerializer
+    queryset = Supply.objects.all()
+    serializer_class = SupplySerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = SalesSerializer(data=request.data)
+        serializer = SupplySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -50,13 +50,13 @@ class SupplyViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk=None, *args, **kwargs):
-        sale = self.get_object(pk)
-        serializer = SalesSerializer(sale)
+        suppply = self.get_object(pk)
+        serializer = SupplySerializer(suppply)
         return Response(serializer.data)
 
     def update(self, request, pk=None, *args, **kwargs):
-        sale = self.get_object(pk)
-        serializer = SalesSerializer(sale, data=request.data)
+        supply = self.get_object(pk)
+        serializer = SupplySerializer(supply, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -64,7 +64,7 @@ class SupplyViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None, *args, **kwargs):
-        sale = self.get_object(pk)
-        sale.delete()
+        supply = self.get_object(pk)
+        supply.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
