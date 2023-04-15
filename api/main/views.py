@@ -1,16 +1,16 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
-from .models import Product, Zakupki, Sales
-from .serializers import ProductSerializer, ZakupkiSerializer, SalesSerializer
+from .models import Supply, Sale
+from .serializers import SupplySerializer, SaleSerializer
 
 
 class SalesViewSet(viewsets.ModelViewSet):
-    queryset = Sales.objects.all()
-    serializer_class = SalesSerializer
+    queryset = Sale.objects.all()
+    serializer_class = SaleSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = SalesSerializer(data=request.data)
+        serializer = SaleSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -19,12 +19,12 @@ class SalesViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk=None, *args, **kwargs):
         sale = self.get_object(pk)
-        serializer = SalesSerializer(sale)
+        serializer = SaleSerializer(sale)
         return Response(serializer.data)
 
     def update(self, request, pk=None, *args, **kwargs):
         sale = self.get_object(pk)
-        serializer = SalesSerializer(sale, data=request.data)
+        serializer = SaleSerializer(sale, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
