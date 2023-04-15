@@ -17,4 +17,11 @@ COPY . /app
 ENV PYTHONUNBUFFERED=1
 
 # Expose the default port used by Django
-EXPOSE 8000
+EXPOSE 8080
+
+# Run the migrations
+RUN ["python", "manage.py", "makemigrations"]
+RUN ["python", "manage.py", "migrate"]
+
+# Run the Django server
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
