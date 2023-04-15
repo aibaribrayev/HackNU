@@ -31,15 +31,6 @@ class SalesViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def partial_update(self, request, pk=None, *args, **kwargs):
-        sale = self.get_object(pk)
-        serializer = SalesSerializer(sale, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
     def destroy(self, request, pk=None, *args, **kwargs):
         sale = self.get_object(pk)
         sale.delete()
