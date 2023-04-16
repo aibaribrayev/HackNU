@@ -8,3 +8,5 @@ flowchart LR
     C -- else --> E[Update sold_amount and add to final_sum]
     E -- End --> F[Add a row to sales table]
 ```
+
+http://92.118.115.218:8080/swagger/
